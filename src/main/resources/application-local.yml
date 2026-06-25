@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ai_composer
+    username: root
+    password: root
+  ai:
+    dashscope:
+      api-key: ${DASHSCOPE_API_KEY:sk-ws-H.RYHMYPY.A9js.MEUCIQDSvuGenZoKzIi5TGhLk_F8pzAVcoYgdsSgNPQpwq_VVQIgceG9bL47gKsPo1zMkUfagmxArlv46XxafKf6yBe6xMA}
+      chat:
+        options:
+          model: qwen-plus

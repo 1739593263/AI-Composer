@@ -1,11 +1,6 @@
 spring:
   application:
     name: AIComposer
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ai_composer
-    username: root
-    password: root
   # session ??
   session:
     store-type: redis
@@ -18,7 +13,8 @@ spring:
       port: 6379
       database: 0
       password:
-
+  profiles:
+    active: local
 server:
   port: 8567
   servlet:

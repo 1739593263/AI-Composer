@@ -99,6 +99,26 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
+        <!-- https://sca.aliyun.com/en/docs/ai/get-started/?spm=7145af80.321ad293.0.0.72aa5e63KBPfLS -->
+        <!-- Spring AI Alibaba dependency -->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.cloud.ai</groupId>-->
+<!--            <artifactId>spring-ai-alibaba-starter</artifactId>-->
+<!--            <version>1.0.0-M2.1</version>-->
+<!--        </dependency>-->
+        <!-- Spring AI Alibaba Agent Framework -->
+        <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-agent-framework</artifactId>
+            <version>1.1.0.0-RC2</version>
+        </dependency>
+        <!-- Spring AI Alibaba DashScope Starter -->
+        <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
+            <version>1.1.0.0-RC2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
