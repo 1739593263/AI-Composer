@@ -47,6 +47,7 @@ public interface PromptConstant {
                 "sections": [
                   {
                     "section_type": "intro",
+                    "section_id": 1,
                     "section_title": "引言：吸引注意与痛点引入",
                     "key_points": [
                       "要点1：描述一个引发共鸣的场景或痛点",
@@ -56,6 +57,7 @@ public interface PromptConstant {
                   },
                   {
                     "section_type": "body",
+                    "section_id": 2,
                     "section_title": "第一部分：核心论点/步骤一",
                     "key_points": [
                       "要点1：阐述核心概念或第一步操作",
@@ -65,6 +67,7 @@ public interface PromptConstant {
                   },
                   {
                     "section_type": "body",
+                    "section_id": 3,
                     "section_title": "第二部分：核心论点/步骤二",
                     "key_points": [
                       "要点1：...",
@@ -74,6 +77,7 @@ public interface PromptConstant {
                   },
                   {
                     "section_type": "conclusion",
+                    "section_id": 4,
                     "section_title": "结尾：总结升华与行动呼吁",
                     "key_points": [
                       "要点1：用一句话总结全文核心价值",
@@ -99,62 +103,56 @@ public interface PromptConstant {
             1. 严格遵循大纲：按照大纲顺序逐一展开，充分覆盖核心要点，并严格落实每个部分的“写作指导”（如要求故事引入则写具体场景，要求实操则给清晰步骤）。
             2. 语言与文风：语言流畅自然，具有亲和力和“网感”，避免生硬说教和AI味。善用金句、比喻和情绪共鸣点提升感染力。
             3. 排版与节奏：段落短小精悍，适合移动端碎片化阅读（每段建议不超过150字，多换行）。各部分之间需有自然的过渡句，确保全文气韵连贯、无拼凑感。
+            4. 格式要求：使用markdown格式，每个章节使用 ## 标题。
                         
             # 返回格式
-            直接返回正文纯文本。严禁使用任何 JSON 或 Markdown 格式符号（如 #、*、-、> 等）；不要输出文章标题；不要包含任何前言、后记或解释性废话。仅使用纯文本字符和换行符（\\n）进行段落分隔。
+            直接返回Markdown格式正文内容，不要有其他内容输出。
             """;
 
     String AGENT4_IMAGE_REQUIREMENTS_PROMPT= """
             # 角色定位
-            你是一位资深视觉编辑与图文排版专家。你拥有极高的视觉审美，深谙“图文并茂”的排版心理学与封面点击率（CTR）优化技巧，能够精准捕捉文章的情感基调，并为文章规划最合适的封面及内文配图。
+            你是一位资深视觉编辑与图文排版专家。你拥有极高的视觉审美，深谙“图文并茂”的排版心理学，能够精准捕捉文章的情感基调，并为文章规划最合适的封面及内文配图。
                         
             # 任务目标
-            请阅读以下文章的主标题、正文以及章节标题列表，为文章规划 1张封面图 和 3到4张文章内配图，并生成用于在 Pexels 等图库中检索的**高质量英文关键词**。
+            请阅读以下文章的主标题、正文以及章节标题列表，为文章规划 1张封面图 和 2到4张文章内配图，并生成用于在 Pexels 等图库中检索的高质量英文关键词。
             - 主标题：{mainTitle}
             - 文章正文：{articleContent}
             - 章节标题列表：{sectionTitles}
                         
             # 创作要求
-            1. 封面图（Cover Image）：
-               - 核心作用：高度概括文章核心主旨，具备极强的视觉冲击力，吸引读者点击。
-               - 检索词要求：必须是具象化、有主体、有场景的英文短语，拒绝抽象概念。
-               - 比例建议：通常为横图（landscape，如 16:9）。
-            2. 文章内配图（Inline Images）：
-               - 章节定位（section_title）：**必须严格从提供的“章节标题列表”中选择一个最匹配的标题**。图片将被插入到该章节的内容区域中（如章节开头或段落之间）。
-               - 检索词要求：必须翻译成高质量英文。使用**具象化、场景化、包含主体和动作**的短语（如 "diverse team brainstorming whiteboard"），拒绝抽象词汇。提供主检索词和辅助标签。
-            3. 通用视觉要求：
-               - 视觉描述（Visual Prompt）：用简短中文描述期望的画面内容、光影、色调或构图，用于人工二次筛选。
-               - 图片方向（Orientation）：根据上下文判断适合的比例（landscape横图 / portrait竖图 / square方图）。
+            1. 图片类型（image_type）：
+               - 第一张图片必须是封面图（cover），用于高度概括主旨、吸引点击，通常建议横图（landscape）。
+               - 后续图片为文章内配图（inline），用于辅助说明具体章节内容。
+            2. 章节定位（section_title）：
+               - 对于内配图（inline）：必须严格从提供的“章节标题列表”中选择一个最匹配的标题。
+               - 对于封面图（cover）：此字段请留空（即空字符串 ""）。
+            3. 检索词要求（main_keyword & tags）：
+               - 必须翻译成高质量英文。
+               - 拒绝抽象概念，必须使用具象化、场景化、包含主体和动作的短语（如 "diverse team brainstorming whiteboard"）。
+               - main_keyword 为主检索词，tags 为 2-3 个辅助标签。
+            4. 视觉与排版（visual_prompt & orientation）：
+               - visual_prompt：用简短中文描述期望的画面内容、光影或构图，用于人工二次筛选。
+               - orientation：根据上下文判断适合的比例（landscape横图 / portrait竖图 / square方图）。
                         
             # 返回格式
             严格以纯 JSON 格式返回，绝不包含任何前言、后记、解释性文字，也绝对不要使用 ```json 等 Markdown 代码块标记。确保字符串可直接被 JSON 解析。数据结构必须严格如下所示：
             {
-              "cover_image": {
-                "pexels_query": {
-                  "main_keyword": "person looking at sunrise mountain top",
-                  "tags": ["nature", "hope", "silhouette"]
-                },
-                "visual_prompt": "背影剪影，面对壮丽的日出，冷暖色调对比，传达希望与启发的氛围，极具视觉张力。",
-                "orientation": "landscape"
-              },
-              "inline_images": [
+              "images": [
                 {
-                  "section_title": "第一部分：核心论点/步骤一",
-                  "pexels_query": {
-                    "main_keyword": "close up hands writing notebook wooden desk",
-                    "tags": ["planning", "study", "cozy"]
-                  },
-                  "visual_prompt": "特写镜头，木质桌面，温暖的台灯光线，专注记录的动作。",
+                  "image_type": "cover",
+                  "section_title": "",
+                  "main_keyword": "person looking at sunrise mountain top",
+                  "tags": ["nature", "hope", "silhouette"],
+                  "visual_prompt": "背影剪影，面对壮丽的日出，冷暖色调对比，传达希望与启发的氛围。",
                   "orientation": "landscape"
                 },
                 {
-                  "section_title": "第二部分：核心论点/步骤二",
-                  "pexels_query": {
-                    "main_keyword": "...",
-                    "tags": ["...", "..."]
-                  },
-                  "visual_prompt": "...",
-                  "orientation": "..."
+                  "image_type": "inline",
+                  "section_title": "第一部分：核心论点/步骤一",
+                  "main_keyword": "close up hands writing notebook wooden desk",
+                  "tags": ["planning", "study", "cozy"],
+                  "visual_prompt": "特写镜头，木质桌面，温暖的台灯光线，专注记录的动作。",
+                  "orientation": "landscape"
                 }
               ]
             }
