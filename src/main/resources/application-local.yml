@@ -6,7 +6,8 @@ spring:
     password: root
   ai:
     dashscope:
-      api-key: ${DASHSCOPE_API_KEY:sk-ws-H.RYHMYPY.A9js.MEUCIQDSvuGenZoKzIi5TGhLk_F8pzAVcoYgdsSgNPQpwq_VVQIgceG9bL47gKsPo1zMkUfagmxArlv46XxafKf6yBe6xMA}
+      api-key: ${DASHSCOPE_API_KEY:sk-ws-H.ELDILDH.T5gu.MEQCIGsJS69YI3_nEiK79B7stAT4i5BmSTRYOZJKzw_ZGkzVAiBbkDaUqdZrrTj9DdqmkaKYF9NACMPvMZvGOAWz9gNZaw}
       chat:
         options:
-          model: qwen-plus
+          model: glm-5.2
+#      base-url: https://ws-638y1k8k3dlbbm2s.cn-beijing.maas.aliyuncs.com/api/v1

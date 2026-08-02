@@ -68,7 +68,10 @@ public class PexelsImgService implements ImgSearchService{
      */
     private String buildCompleteUrl(String keywords, String orientation) {
         return String.format("%s?query=%s&per_page=%d&orientation=%s",
-                pexelsConfig.getUrl(), keywords, 40, orientation);
+                pexelsConfig.getUrl(),
+                keywords,
+                40,
+                orientation);
     }
 
     private String extractImageUrl(String responseBody, String keywords) {
