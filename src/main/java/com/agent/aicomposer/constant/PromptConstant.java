@@ -16,13 +16,9 @@ public interface PromptConstant {
             # 返回格式
             严格以纯 JSON 格式返回，绝不包含任何前言、后记、解释性文字，也绝对不要使用 ```json 等 Markdown 代码块标记。确保字符串可直接被 JSON 解析。数据结构如下：
             {
-              "titles": [
-                {
-                  "main_title": "主标题",
-                  "sub_title": "副标题"
-                }
-              ]
-            }         
+              "main_title": "主标题",
+              "sub_title": "副标题"
+            }
             """;
 
     String AGENT2_OUTLINE_PROMPT= """
@@ -43,50 +39,48 @@ public interface PromptConstant {
             # 返回格式
             严格以纯 JSON 格式返回，绝不包含任何前言、后记、解释性文字，也绝对不要使用 ```json 等 Markdown 代码块标记。确保字符串可直接被 JSON 解析。数据结构如下：
             {
-              "outline": {
-                "sections": [
-                  {
-                    "section_type": "intro",
-                    "section_id": 1,
-                    "section_title": "引言：吸引注意与痛点引入",
-                    "key_points": [
-                      "要点1：描述一个引发共鸣的场景或痛点",
-                      "要点2：抛出核心悬念或文章主旨"
-                    ],
-                    "writing_guide": "使用故事或反常识现象开场，字数控制在200字以内，迅速抓住读者眼球。"
-                  },
-                  {
-                    "section_type": "body",
-                    "section_id": 2,
-                    "section_title": "第一部分：核心论点/步骤一",
-                    "key_points": [
-                      "要点1：阐述核心概念或第一步操作",
-                      "要点2：提供具体的案例或数据支撑"
-                    ],
-                    "writing_guide": "采用总分结构，语言要求专业且通俗易懂，适当使用加粗突出核心概念。"
-                  },
-                  {
-                    "section_type": "body",
-                    "section_id": 3,
-                    "section_title": "第二部分：核心论点/步骤二",
-                    "key_points": [
-                      "要点1：...",
-                      "要点2：..."
-                    ],
-                    "writing_guide": "..."
-                  },
-                  {
-                    "section_type": "conclusion",
-                    "section_id": 4,
-                    "section_title": "结尾：总结升华与行动呼吁",
-                    "key_points": [
-                      "要点1：用一句话总结全文核心价值",
-                      "要点2：给出具体的行动建议或互动引导"
-                    ],
-                    "writing_guide": "情绪饱满，提供金句升华主题，并引导读者点赞、评论或收藏。"
-                  }
-                ]
-              }
+              "sections": [
+                {
+                  "section_type": "intro",
+                  "section_id": 1,
+                  "section_title": "引言：吸引注意与痛点引入",
+                  "key_points": [
+                    "要点1：描述一个引发共鸣的场景或痛点",
+                    "要点2：抛出核心悬念或文章主旨"
+                  ],
+                  "writing_guide": "使用故事或反常识现象开场，字数控制在200字以内，迅速抓住读者眼球。"
+                },
+                {
+                  "section_type": "body",
+                  "section_id": 2,
+                  "section_title": "第一部分：核心论点/步骤一",
+                  "key_points": [
+                    "要点1：阐述核心概念或第一步操作",
+                    "要点2：提供具体的案例或数据支撑"
+                  ],
+                  "writing_guide": "采用总分结构，语言要求专业且通俗易懂，适当使用加粗突出核心概念。"
+                },
+                {
+                  "section_type": "body",
+                  "section_id": 3,
+                  "section_title": "第二部分：核心论点/步骤二",
+                  "key_points": [
+                    "要点1：...",
+                    "要点2：..."
+                  ],
+                  "writing_guide": "..."
+                },
+                {
+                  "section_type": "conclusion",
+                  "section_id": 4,
+                  "section_title": "结尾：总结升华与行动呼吁",
+                  "key_points": [
+                    "要点1：用一句话总结全文核心价值",
+                    "要点2：给出具体的行动建议或互动引导"
+                  ],
+                  "writing_guide": "情绪饱满，提供金句升华主题，并引导读者点赞、评论或收藏。"
+                }
+              ]
             }          
             """;
     String AGENT3_CONTENT_PROMPT= """
@@ -136,25 +130,23 @@ public interface PromptConstant {
                         
             # 返回格式
             严格以纯 JSON 格式返回，绝不包含任何前言、后记、解释性文字，也绝对不要使用 ```json 等 Markdown 代码块标记。确保字符串可直接被 JSON 解析。数据结构必须严格如下所示：
-            {
-              "images": [
-                {
-                  "image_type": "cover",
-                  "section_title": "",
-                  "main_keyword": "person looking at sunrise mountain top",
-                  "tags": ["nature", "hope", "silhouette"],
-                  "visual_prompt": "背影剪影，面对壮丽的日出，冷暖色调对比，传达希望与启发的氛围。",
-                  "orientation": "landscape"
-                },
-                {
-                  "image_type": "inline",
-                  "section_title": "第一部分：核心论点/步骤一",
-                  "main_keyword": "close up hands writing notebook wooden desk",
-                  "tags": ["planning", "study", "cozy"],
-                  "visual_prompt": "特写镜头，木质桌面，温暖的台灯光线，专注记录的动作。",
-                  "orientation": "landscape"
-                }
-              ]
-            }
+            [
+              {
+                "image_type": "cover",
+                "section_title": "",
+                "main_keyword": "person looking at sunrise mountain top",
+                "tags": ["nature", "hope", "silhouette"],
+                "visual_prompt": "背影剪影，面对壮丽的日出，冷暖色调对比，传达希望与启发的氛围。",
+                "orientation": "landscape"
+              },
+              {
+                "image_type": "inline",
+                "section_title": "第一部分：核心论点/步骤一",
+                "main_keyword": "close up hands writing notebook wooden desk",
+                "tags": ["planning", "study", "cozy"],
+                "visual_prompt": "特写镜头，木质桌面，温暖的台灯光线，专注记录的动作。",
+                "orientation": "landscape"
+              }
+            ]
             """;
 }
