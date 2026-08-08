@@ -55,6 +55,11 @@ public class Article implements Serializable {
     private String subTitle;
 
     /**
+     * 标题方案列表（JSON格式）
+     */
+//    private String titleOptions;
+
+    /**
      * 大纲（JSON格式）
      */
     private String outline;
