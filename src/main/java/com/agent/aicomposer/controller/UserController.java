@@ -15,11 +15,14 @@ import com.agent.aicomposer.model.dto.user.UserRegisterRequest;
 import com.agent.aicomposer.model.entity.User;
 import com.agent.aicomposer.model.vo.LoginUserVO;
 import com.agent.aicomposer.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Tag(name = "用户窗口")
 @RequestMapping("/user")
 public class UserController {
 
@@ -74,6 +77,7 @@ public class UserController {
      * 创建用户（管理员）
      */
     @PostMapping("/add")
+    @Operation(summary = "addUser: 创建用户（管理员）")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addUser(@RequestBody UserAddRequest userAddRequest) {
         ThrowUtils.throwIf(userAddRequest == null, ErrorCode.PARAMS_ERROR);
