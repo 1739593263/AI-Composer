@@ -46,7 +46,7 @@
 import {useRouter} from "vue-router";
 import {reactive} from "vue";
 import {message} from "ant-design-vue";
-import {userRegister} from "@/api/user";
+import {userRegister} from "@/api/aicomposer/userController.ts";
 
 const router = useRouter()
 

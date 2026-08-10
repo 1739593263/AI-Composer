@@ -66,7 +66,7 @@ import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { message } from "ant-design-vue";
 import { useLoginUserStore } from "@/stores/loginUser";
-import { userLogout } from "@/api/user";
+import { userLogout } from "@/api/aicomposer/userController.ts";
 import { DEFAULT_USERNAME } from "@/constants/user";
 
 const router = useRouter()

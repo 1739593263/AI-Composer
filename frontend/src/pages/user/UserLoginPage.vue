@@ -49,7 +49,7 @@
 import {reactive} from "vue";
 import {useRouter} from "vue-router";
 import {message} from "ant-design-vue";
-import {userLogin} from "@/api/user";
+import {userLogin} from "@/api/aicomposer/userController.ts";
 import {useLoginUserStore} from "@/stores/loginUser";
 
 const formState = reactive<API.UserLoginRequest>({
