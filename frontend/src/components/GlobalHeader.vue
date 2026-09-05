@@ -11,6 +11,11 @@
       </div>
 
       <div class="header-center">
+        <nav class="header-nav">
+          <router-link to="/" class="nav-link" exact-active-class="active">首页</router-link>
+          <router-link to="/article/create" class="nav-link" active-class="active">文章创作</router-link>
+          <router-link to="/article/history" class="nav-link" active-class="active">历史</router-link>
+        </nav>
         <a-input-search
           class="header-search"
           placeholder="搜索作品、风格或关键词"
@@ -142,11 +147,42 @@ const handleLogout = async () => {
 
 .header-center {
   flex: 1;
-  max-width: 560px;
+  max-width: 760px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.nav-link {
+  padding: 6px 14px;
+  font-size: 14px;
+  color: #4b5563;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.nav-link:hover {
+  color: #7c3aed;
+  background-color: rgba(124, 58, 237, 0.08);
+}
+
+.nav-link.active {
+  color: #7c3aed;
+  font-weight: 600;
+  background-color: rgba(124, 58, 237, 0.1);
 }
 
 .header-search {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 .header-right {

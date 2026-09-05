@@ -20,10 +20,17 @@ import GlobalFooter from '@/components/GlobalFooter.vue'
 
 <style scoped>
 .basic-layout {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: none;
 }
 
 .main-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   padding: 0;
   background: none;

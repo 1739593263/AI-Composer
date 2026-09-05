@@ -18,6 +18,21 @@ const router = createRouter({
                     component: () => import('@/pages/HomePage.vue'),
                 },
                 {
+                    path: 'article/create',
+                    name: '文章创作',
+                    component: () => import('@/pages/article/ArticleCreatePage.vue'),
+                },
+                {
+                    path: 'article/history',
+                    name: '创作历史',
+                    component: () => import('@/pages/article/ArticleHistoryPage.vue'),
+                },
+                {
+                    path: 'article/detail',
+                    name: '文章查看',
+                    component: () => import('@/pages/article/ArticleDetailPage.vue'),
+                },
+                {
                     path: 'admin/userManage',
                     name: '用户管理',
                     component: () => import('@/pages/admin/UserManagePage.vue'),

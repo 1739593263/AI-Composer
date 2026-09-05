@@ -74,7 +74,7 @@ public class ArticleAsyncService {
 
     private Map<String, Object> buildMessageData(String message, ArticleState state) {
         String streamingPrefix2 = SseMessageTypeEnum.AGENT2_STREAMING.getStreamingPrefix();
-        String streamingPrefix3 = SseMessageTypeEnum.AGENT3_COMPLETE.getStreamingPrefix();
+        String streamingPrefix3 = SseMessageTypeEnum.AGENT3_STREAMING.getStreamingPrefix();
         String imageCompletePrefix = SseMessageTypeEnum.IMAGE_COMPLETE.getStreamingPrefix();
 
         if (message.startsWith(streamingPrefix2)) {
@@ -84,7 +84,7 @@ public class ArticleAsyncService {
 
         if (message.startsWith(streamingPrefix3)) {
             return buildStreamingData(SseMessageTypeEnum.AGENT3_STREAMING,
-                    message.substring(streamingPrefix2.length()));
+                    message.substring(streamingPrefix3.length()));
         }
 
         if (message.startsWith(imageCompletePrefix)) {
