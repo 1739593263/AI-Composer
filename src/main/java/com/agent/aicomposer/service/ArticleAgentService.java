@@ -17,6 +17,7 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -30,6 +31,8 @@ public class ArticleAgentService {
     @Resource
     private ImgSearchService imgSearchService;
 
+    // 大模型重发次数限制
+    private Integer MAX_ATTEMPT = 5;
     /**
      * 执行完整的文章生成流程
      *
@@ -192,18 +195,39 @@ public class ArticleAgentService {
     }
 
     private String callLlmWithStreaming(String prompt, Consumer<String> streamHandler, SseMessageTypeEnum messageTypeEnum) {
-        Flux<ChatResponse> stream = chatModel.stream(new Prompt(new UserMessage(prompt)));
-        StringBuilder contentBuilder = new StringBuilder();
-        stream.doOnNext(response -> {
-            String chunk = response.getResult().getOutput().getText();
-            if (chunk!=null || !chunk.isEmpty()) {
-                contentBuilder.append(chunk);
-                streamHandler.accept(messageTypeEnum.getStreamingPrefix()+chunk);
+        int attempt = 0;
+
+        while (true) {
+            attempt += 1;
+            final int currentAttempt = attempt;
+            Flux<ChatResponse> stream = chatModel.stream(new Prompt(new UserMessage(prompt)));
+            StringBuilder contentBuilder = new StringBuilder();
+            String content = null;
+            try {
+                stream.doOnNext(response -> {
+                            String chunk = response.getResult().getOutput().getText();
+                            if (chunk!=null || !chunk.isEmpty()) {
+                                contentBuilder.append(chunk);
+                                streamHandler.accept(messageTypeEnum.getStreamingPrefix()+chunk);
+                            }
+                        })
+                        .doOnError(error->log.error("LLM调用第{}失败， MessageType={}",currentAttempt,messageTypeEnum,error))
+                        .blockLast(Duration.ofSeconds(120));  // 兜底超时
+
+                content = contentBuilder.toString();
+            } catch (Exception e) {
+                log.error("LLM调用第{}失败， MessageType={}",currentAttempt,messageTypeEnum,e);
             }
-        })
-                .doOnError(error->log.error("LLM调用失败， MessageType={}",messageTypeEnum,error))
-                .blockLast();
-        return contentBuilder.toString();
+            // 只有“非空”才算成功；空结果 / 异常统一按失败计一次
+            if (content != null && !content.isEmpty()) {
+                return content;
+            }
+            // 如果超过尝试限制，就抛异常并停止循环重试
+            if (attempt >= MAX_ATTEMPT) {
+                throw new RuntimeException("LLM调用失败，已重试 " + attempt + " 次");
+            }
+            log.error("LLM调用第{}失败", attempt + 1);
+        }
     }
 
     private <T> T parseJsonResponse(String content, Class<T> clazz, String name) {
