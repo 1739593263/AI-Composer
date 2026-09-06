@@ -1,9 +1,9 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { message } from 'ant-design-vue'
-import { createArticle } from '@/api/aicomposer/articleController'
-import { closeSSE, connectSSE } from '@/utils/sse'
-import type { SSEMessage } from '@/utils/sse'
+import { createArticle, getArticle } from '@/api/aicomposer/articleController'
+import { connectSSEWithRetry } from '@/utils/sse'
+import type { SSEConnection, SSEMessage } from '@/utils/sse'
 
 /** 主标题 / 副标题 */
 export interface TitleResult {
@@ -87,7 +87,7 @@ export const useArticleCreateStore = defineStore('articleCreate', () => {
     const elapsed = ref(0)
 
     // 连接 / 定时器为普通成员（非响应式），SSE 连接跨页面保持接收
-    let source: EventSource | null = null
+    let source: SSEConnection | null = null
     let timer: number | undefined
 
     function startTimer() {
@@ -122,21 +122,72 @@ export const useArticleCreateStore = defineStore('articleCreate', () => {
     }
 
     // ===================== SSE 处理 =====================
-    function connectSource() {
-        closeSSE(source)
+    function stopSource() {
+        source?.close()
         source = null
+    }
+
+    function connectSource() {
+        stopSource()
         if (!taskId.value) {
             return
         }
-        source = connectSSE(taskId.value, {
-            onMessage: handleSseMessage,
-            onError: () => {
-                message.error('实时连接中断，请稍后查看结果')
+        source = connectSSEWithRetry(
+            taskId.value,
+            {
+                onMessage: handleSseMessage,
+                onComplete: () => {
+                    // 完成 / 出错时已在消息处理中收尾
+                },
             },
-            onComplete: () => {
-                // 已完成 / 出错时在消息中处理
+            {
+                maxAttempts: 5,
+                baseDelayMs: 1000,
+                onFailed: () => {
+                    // 重连耗尽：查询任务真实状态，决定取结果 / 续收 / 放弃
+                    checkStatusAfterDisconnect()
+                },
             },
-        })
+        )
+    }
+
+    /**
+     * 断线重连耗尽后：按文章实际状态分流
+     * - COMPLETED：直接拉取完整文章渲染
+     * - FAILED：标记失败
+     * - PROCESSING：保留本地快照，重新建立连接续收增量
+     */
+    async function checkStatusAfterDisconnect() {
+        try {
+            const res = await getArticle({ taskId: taskId.value })
+            if (res.data.code === 0 && res.data.data) {
+                const data = res.data.data
+                if (data.status === 'COMPLETED') {
+                    titleResult.value = {
+                        main_title: data.mainTitle,
+                        sub_title: data.subTitle,
+                    }
+                    contentText.value = data.content || ''
+                    fullContent.value = data.fullContent || data.content || ''
+                    finishGeneration()
+                    message.success('文章生成完成')
+                    return
+                }
+                if (data.status === 'FAILED') {
+                    failGeneration()
+                    message.error(data.errorMessage || '文章生成失败，请重试')
+                    return
+                }
+                // 仍在处理中：本地快照保留，续收增量
+                message.info('网络已恢复，正在重新连接生成流程')
+                connectSource()
+                return
+            }
+            message.error('连接中断，请稍后手动刷新查看结果')
+        } catch (e) {
+            console.error('查询文章状态失败', e)
+            message.error('连接中断，请稍后手动刷新查看结果')
+        }
     }
 
     /** 回到创作页时恢复可能中断的 SSE 连接 */
@@ -237,8 +288,7 @@ export const useArticleCreateStore = defineStore('articleCreate', () => {
 
     // ===================== 重置 =====================
     function resetResult() {
-        closeSSE(source)
-        source = null
+        stopSource()
         stopTimer()
         resetStages()
         titleResult.value = {}
