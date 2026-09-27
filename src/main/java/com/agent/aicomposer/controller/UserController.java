@@ -1,7 +1,7 @@
 package com.agent.aicomposer.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.agent.aicomposer.aop.annotation.AuthCheck;
+import com.agent.aicomposer.aop.annotation.AuthPointcut;
 import com.agent.aicomposer.common.BaseResponse;
 import com.agent.aicomposer.common.DeleteRequest;
 import com.agent.aicomposer.common.ResultUtils;
@@ -78,7 +78,7 @@ public class UserController {
      */
     @PostMapping("/add")
     @Operation(summary = "addUser: 创建用户（管理员）")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @AuthPointcut(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addUser(@RequestBody UserAddRequest userAddRequest) {
         ThrowUtils.throwIf(userAddRequest == null, ErrorCode.PARAMS_ERROR);
         User user = new User();
@@ -96,7 +96,7 @@ public class UserController {
      * 删除用户（管理员）
      */
     @PostMapping("/delete")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @AuthPointcut(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteUser(@RequestBody DeleteRequest deleteRequest) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);

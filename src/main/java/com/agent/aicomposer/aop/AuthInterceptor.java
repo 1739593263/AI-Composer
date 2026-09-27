@@ -1,6 +1,6 @@
 package com.agent.aicomposer.aop;
 
-import com.agent.aicomposer.aop.annotation.AuthCheck;
+import com.agent.aicomposer.aop.annotation.AuthPointcut;
 import com.agent.aicomposer.exception.BusinessException;
 import com.agent.aicomposer.exception.ErrorCode;
 import com.agent.aicomposer.model.entity.User;
@@ -25,13 +25,13 @@ public class AuthInterceptor {
     /**
      * authCheck标注方法的拦截逻辑
      * @param joinPoint
-     * @param authCheck
+     * @param authPointcut
      * @return
      * @throws Throwable
      */
-    @Around("@annotation(authCheck)")
-    public Object doInterceptor(ProceedingJoinPoint joinPoint, AuthCheck authCheck) throws Throwable {
-        String mustRole = authCheck.mustRole();
+    @Around("@annotation(authPointcut)")
+    public Object doInterceptor(ProceedingJoinPoint joinPoint, AuthPointcut authPointcut) throws Throwable {
+        String mustRole = authPointcut.mustRole();
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 

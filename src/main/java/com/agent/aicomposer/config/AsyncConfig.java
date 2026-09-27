@@ -15,8 +15,8 @@ public class AsyncConfig {
     public Executor articleExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 
-        executor.setCorePoolSize(5);
-        executor.setMaxPoolSize(10);
+        executor.setCorePoolSize(12);
+        executor.setMaxPoolSize(48);
         executor.setKeepAliveSeconds(5);
         executor.setQueueCapacity(100);
         // 设置线程名称前缀

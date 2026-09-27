@@ -46,3 +46,20 @@ Intelligent passage composer is consist of multiple agents
 > 异常分支：任意环节抛错 → 状态更新为 `FAILED` → 推送 `ERROR` 事件 → 同样关闭连接。
 
 > 注意：第 5 步必须尽快建立 SSE 连接，若在连接建立前流水线已推送事件，这些事件会被丢弃（后端只打 WARN 日志），前端将收不到。
+
+
+# 快速开始
+
+1. 下载本项目：`git clone <仓库地址>`
+2. 配置 `src/main/resources/application.yml` 中的 Redis 连接（host、port、password 等）
+3. 自行新建配置文件 `src/main/resources/application-local.yml`（该文件已被 gitignore，不随项目上传），并配置：
+   - 数据库连接：MySQL 的 url、username、password
+   - AI 大模型：DashScope 的 api-key、model（本项目用的阿里云百炼平台大模型，可参考 `https://dashscope.aliyun.com` 申请）
+4. 启动后端服务后访问 `http://localhost:8567/api/swagger-ui.html` 查看接口文档
+
+
+# 页面样式
+![img0.png](resources/img0.png)
+![img1.png](resources/img1.png)
+![img2.png](resources/img2.png)
+![img3.png](resources/img3.png)

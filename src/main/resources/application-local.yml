@@ -9,5 +9,6 @@ spring:
       api-key: ${DASHSCOPE_API_KEY:sk-ws-H.ELDILDH.T5gu.MEQCIGsJS69YI3_nEiK79B7stAT4i5BmSTRYOZJKzw_ZGkzVAiBbkDaUqdZrrTj9DdqmkaKYF9NACMPvMZvGOAWz9gNZaw}
       chat:
         options:
-          model: glm-5.2
+          model: glm-5.3
+          enable_thinking: true
 #      base-url: https://ws-638y1k8k3dlbbm2s.cn-beijing.maas.aliyuncs.com/api/v1

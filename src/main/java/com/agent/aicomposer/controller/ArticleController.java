@@ -1,6 +1,6 @@
 package com.agent.aicomposer.controller;
 
-import com.agent.aicomposer.aop.annotation.AuthCheck;
+import com.agent.aicomposer.aop.annotation.AuthPointcut;
 import com.agent.aicomposer.common.BaseResponse;
 import com.agent.aicomposer.common.DeleteRequest;
 import com.agent.aicomposer.common.ResultUtils;
@@ -86,7 +86,7 @@ public class ArticleController {
      */
     @GetMapping("/{taskId}")
     @Operation(summary = "获取文章详情")
-    @AuthCheck(mustRole = "user")
+    @AuthPointcut(mustRole = "user")
     public BaseResponse<ArticleVO> getArticle(@PathVariable String taskId, HttpServletRequest httpServletRequest) {
         ThrowUtils.throwIf(taskId == null || taskId.trim().isEmpty(),
                 ErrorCode.PARAMS_ERROR, "任务ID不能为空");
@@ -102,7 +102,7 @@ public class ArticleController {
      */
     @PostMapping("/list")
     @Operation(summary = "分页查询文章列表")
-    @AuthCheck(mustRole = "user")
+    @AuthPointcut(mustRole = "user")
     public BaseResponse<Page<ArticleVO>> listArticle(@RequestBody ArticleQueryRequest request,
                                                      HttpServletRequest httpServletRequest) {
         User loginUser = userService.getLoginUser(httpServletRequest);
@@ -116,7 +116,7 @@ public class ArticleController {
      */
     @PostMapping ("/delete")
     @Operation(summary = "删除文章记录")
-    @AuthCheck(mustRole = "user")
+    @AuthPointcut(mustRole = "user")
     public BaseResponse<Boolean> deleteArticle(@RequestBody DeleteRequest deleteRequest,
                                                HttpServletRequest httpServletRequest) {
         ThrowUtils.throwIf(deleteRequest == null || deleteRequest.getId() == null,
